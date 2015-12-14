@@ -19,8 +19,6 @@ for (var i = 0; i < 4; i++) {
   })
 }
 
-stupid changes
-
 var canhand = true
 $(document).on('click', ".handcard", function(){
     if (canhand === true){
