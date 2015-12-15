@@ -13,8 +13,24 @@ app.get('/', function(req, res){
 });
 
 
+var usercounter = 1
+
 io.on('connection', function(socket){
   console.log("a user connected")
+
+  var newid = "player" + usercounter
+
+  console.log(userid)
+
+  if (usercounter =! 4) {
+    usercounter++
+  }else{
+    usercounter = 1;
+  }
+
+  console.log(usercounter)
+
+  socket.emit('userId', {"newid" : newid})
 
   socket.on('sendcard', function(res){
     console.log(res)

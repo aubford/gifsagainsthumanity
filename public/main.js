@@ -18,6 +18,12 @@ for (var i = 0; i < 4; i++) {
   $(".hand").append("<img data-player='player1' class='handcard' src='"+res.data.image_url+"'>")
   })
 }
+/////////////
+var playerId
+socket.on('userId', function(id){
+  console.log(id)
+  playerId = id.newid
+})
 
 var canhand = true
 $(document).on('click', ".handcard", function(){
@@ -27,10 +33,30 @@ $(document).on('click', ".handcard", function(){
     canhand = false
 })
 
-socket.on('sendcard', function(res){
-  $('.board').append(res)
+socket.on('sendcard', function(card){
+  $('.board').append(card)
   $('.board').children().removeClass("handcard").addClass("boardcard")
 })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 })
