@@ -14,27 +14,30 @@ app.get('/', function(req, res){
 
 
 var usercounter = 1
+var roomid
 
 io.on('connection', function(socket){
   console.log("a user connected")
-
+//////////////////
   var newid = "player" + usercounter
 
-  console.log(userid)
+  if (usercounter === 1){
+    roomid = socket.id
+  }else{
+    socket.join(roomid)
+  }
 
-  if (usercounter =! 4) {
+  if (usercounter !== 4) {
     usercounter++
   }else{
     usercounter = 1;
+    io.emit('startgame', "player1")
   }
-
-  console.log(usercounter)
-
-  socket.emit('userId', {"newid" : newid})
+///////////////
+  socket.emit('userId', {"newid" : newid, "roomid" : roomid})
 
   socket.on('sendcard', function(res){
-    console.log(res)
-    io.emit('sendcard', res)
+    io.to(res.room).emit('sendcard', res.card)
   })
 
 
