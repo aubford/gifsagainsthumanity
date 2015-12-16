@@ -14,7 +14,8 @@ function getgifs(){
 
 //starting score and players
 var score = [0,0,0,0]
-var players = ["a cat","Beebs","another cat","a person falling down"]
+var players = ["a cat","Beebs","yet another cat","a person falling down"]
+var selector = 1
 
 
 ///////////////////////////SETUP/////////////////////////////
@@ -32,6 +33,14 @@ socket.on('userId', function(ids){
   roomId = ids.roomId;
   console.log(playerId);
   console.log(roomId);
+
+  //display directions
+  if (selector === playerId) {
+    $(".turnDisplay").html("It's your turn!  Pick the .gif submitted by the other players that best answers your question!")
+  }else{
+    $(".turnDisplay").html("Pick a .gif from the options below that you think best answers this question!")
+  }
+
 })
 
 //function for dealing the cards
@@ -52,7 +61,6 @@ deal()
 ///////////////////////////RESET//////////////////////////
 
 //INCOMING EVENT: Reset the game.
-var selector = 1
 socket.on('newgame', function(res){
   //change who the selector is
   if (selector === 4){
@@ -62,11 +70,19 @@ socket.on('newgame', function(res){
   }
   //Reset everything.  Re-deal.
   $(".question").html(res.newQuestion)
+
+  //display directions
+  if (selector === playerId) {
+    $(".turnDisplay").html("It's your turn!  Pick the .gif submitted by the other players that best answers your question!")
+  }else{
+    $(".turnDisplay").html("Pick a .gif from the options below that you think best answers this question!")
+  }
+
   canhand=true
   canboard = true
 
   deal()
-  
+
   console.log(selector)
 })
 
@@ -106,7 +122,7 @@ socket.on('updatescore', function(scoreincoming){
     score = scoreincoming
     $(".score1").html("A Cat: " + score[0])
     $(".score2").html("Beebs: " + score[1])
-    $(".score3").html("Another Cat: " + score[2])
+    $(".score3").html("Yet Another Cat: " + score[2])
     $(".score4").html("A Person Falling Down: " + score[3])
 })
 
