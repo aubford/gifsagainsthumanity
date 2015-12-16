@@ -6,46 +6,62 @@ var io = require('socket.io')(http)
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 
-
-
 app.get('/', function(req, res){
   res.render('index');
 });
 
 
+///SOCKETS///
+//code for each socket connection.
+var questionBank = require("./public/questionBank.js")
+var userCounter = 1
+var roomId
+var startingQuestionNumber
 
-
-var usercounter = 1
-var roomid
 io.on('connection', function(socket){
+//////////////SETUP//////////////////////////
+    //determines which player# this is.
+    var newId = userCounter
 
-    var newid = usercounter
-
-    if (usercounter === 1){
-      roomid = socket.id
+    //if socket is a Player1, then it's socket.id is the new roomId.
+    if (userCounter === 1){
+      roomId = socket.id
+      startingQuestionNumber = Math.floor(Math.random() * questionBank.questions.length)
+    //other players add this roomId.
     }else{
-      socket.join(roomid)
+      socket.join(roomId)
     }
 
 
-    socket.emit('userId', {"newid" : newid, "roomid" : roomid})
+    //OUTPUT-THIS EVENT: tack userId and roomId to the new socket's main.js.
+    socket.emit('userId', {"newId" : newId, "roomId" : roomId, "question":questionBank.questions[startingQuestionNumber]})
+    io.to(roomId).emit('updatescore', [0,0,0,0])
 
-    if (usercounter !== 4) {
-      usercounter++
+
+    //counter for userCounter increments between 1 and 4.
+    if (userCounter !== 4) {
+      userCounter++
     }else{
-      // io.to(roomid).emit('updatescore', [0,0,0,0])
-      usercounter = 1;
+      userCounter = 1;
     }
 
-///////////////
+/////////////ACTIONS//////////////////////////
 
+    ///HAND CARD///
 
+    //INCOMING EVENT: player clicked a hand-card
     socket.on('sendcard', function(res){
-      io.to(res.room).emit('sendcard', res.card)
+      //OUTPUT-ALL EVENT: send that card to other palyers in room.
+      io.to(res.roomId).emit('sendcard', res.card)
     })
 
-    socket.on('selection', function(res){
 
+
+    ///WINNING CARD///
+
+    //INCOMING EVENT:  selector chose winning card.
+    socket.on('selection', function(res){
+      //+1 point for winning player
       var score = res.score
       switch (res.playerwinner) {
         case 1: score[0]++
@@ -57,15 +73,12 @@ io.on('connection', function(socket){
         case 4: score[3]++
         break;
       }
-      io.to(res.room).emit('updatescore', score)
-
-      io.to(res.room).emit('newgame')
+      //OUTPUT-ALL EVENT: send the score to all players in room.
+      io.to(res.roomId).emit('updatescore', score)
+      //OUTPUT-ALL EVENT: send 'newgame' event to all players in room.
+      io.to(res.roomId).emit('newgame', {'newQuestion': questionBank.questions[Math.floor(Math.random() * questionBank.questions.length)]})
+      
     })
-
-
-
-
-
 
 
 
