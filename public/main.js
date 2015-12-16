@@ -11,8 +11,8 @@ function getgifs(){
     })
   }
 //static variables
-var turnMessage = "It's your turn!  Pick the .gif submitted by the other players in the box above that best answers your question!"
-var notTurnMessage = "Pick a .gif from the options below that you think best answers this question!"
+var turnMessage = "It's your turn!  Pick the .gif submitted by the other players in the box above that best answers the statement!"
+var notTurnMessage = "Pick a .gif from the options below that you think best answers the statement!"
 
 //starting score and players
 var score = [0,0,0,0]
@@ -58,7 +58,7 @@ for (var i = 0; i < 4; i++) {
 }
 }
 //call it
-deal()
+// deal()      !!!!!!!!
 
 ///////////////////////////RESET//////////////////////////
 
