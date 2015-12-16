@@ -17,8 +17,16 @@ header {
 .board {
   height: 25vh;
   width: 100vw;
+  position: relative;
   margin: 0 auto;
   border: .5vw solid black;
+}
+
+.winOrLose {
+  display: none;
+  position: absolute;
+  z-index: 1;
+  background: red;
 }
 
 .question {

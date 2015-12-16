@@ -10,7 +10,9 @@ function getgifs(){
       dataType:"json"
     })
   }
-
+//static variables
+var turnMessage = "It's your turn!  Pick the .gif submitted by the other players in the box above that best answers your question!"
+var notTurnMessage = "Pick a .gif from the options below that you think best answers this question!"
 
 //starting score and players
 var score = [0,0,0,0]
@@ -36,9 +38,9 @@ socket.on('userId', function(ids){
 
   //display directions
   if (selector === playerId) {
-    $(".turnDisplay").html("It's your turn!  Pick the .gif submitted by the other players that best answers your question!")
+    $(".turnDisplay").html(turnMessage)
   }else{
-    $(".turnDisplay").html("Pick a .gif from the options below that you think best answers this question!")
+    $(".turnDisplay").html(notTurnMessage)
   }
 
 })
@@ -47,7 +49,7 @@ socket.on('userId', function(ids){
 function deal(){
 for (var i = 0; i < 4; i++) {
   $(".hand").children().remove()
-  $(".board").children().remove()
+  $(".board").children().not("p").remove()
 
   var callrandom = getgifs()
   callrandom.done(function(res){
@@ -66,19 +68,20 @@ socket.on('newgame', function(res){
   if (selector === 4){
     selector = 1
   }else{
-  selector++
+    selector++
   }
-  //Reset everything.  Re-deal.
-  $(".question").html(res.newQuestion)
 
   //display directions
   if (selector === playerId) {
-    $(".turnDisplay").html("It's your turn!  Pick the .gif submitted by the other players that best answers your question!")
+    $(".turnDisplay").html(turnMessage)
   }else{
-    $(".turnDisplay").html("Pick a .gif from the options below that you think best answers this question!")
+    $(".turnDisplay").html(notTurnMessage)
   }
 
-  canhand=true
+  //Reset everything.  Re-deal.
+  $(".question").html(res.newQuestion)
+  $(".winOrLose").css({"display":"none"})
+  canhand = true
   canboard = true
 
   deal()
@@ -111,19 +114,50 @@ var canboard = true
 $(document).on('click', '.boardcard', function(){
     if (selector === playerId && canboard === true){
       //send: winning card's playerId, the roomId, and current score.
-      socket.emit('selection', {"playerwinner":$(this).data("player"), 'roomId':roomId, 'score':score})
+      socket.emit('selection', {"playerWinner":$(this).data("player"), 'roomId':roomId})
     }
       canboard = false
 })
 
 
-//INCOMING EVENT: Update scoreboard.
-socket.on('updatescore', function(scoreincoming){
-    score = scoreincoming
+//INCOMING EVENT: Update scoreboard.  Tell winner they won; others they lost.
+socket.on('sendWinner', function(res){
+    console.log(res)
+    //edit the score
+    var winner
+    switch (res) {
+      case 1: score[0]++
+      winner = "Player 1"
+      break;
+      case 2: score[1]++
+      winner = "Player 2"
+      break;
+      case 3: score[2]++
+      winner = "Player 3"
+      break;
+      case 4: score[3]++
+      winner = "Player 4"
+      break;
+    }
+
     $(".score1").html("A Cat: " + score[0])
     $(".score2").html("Beebs: " + score[1])
     $(".score3").html("Yet Another Cat: " + score[2])
     $(".score4").html("A Person Falling Down: " + score[3])
+
+
+    //show win/lose message
+    if (playerId === selector){
+      $(".winOrLose").html("Terrible choice, " + winner + " wins.")
+    }else if (playerId === res){
+      $(".winOrLose").html("You win.  You must be a terrible person...")
+
+    }else{
+      $(".winOrLose").html(winner + " wins, you lose. Ha.")
+    }
+
+    $(".winOrLose").css({"display":"block"})
+
 })
 
 
