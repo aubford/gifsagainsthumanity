@@ -15,7 +15,8 @@ var turnMessage = "It's your turn!  Pick your favorite answer above!"
 var notTurnMessage = "Pick a .gif below as your answer!"
 
 //starting score and players
-var players = [{moniker: "a cat", score:0},{moniker: "dancing baby", 0},{moniker: "another cat", score: 0},{moniker: "Charlie", score:0}, {moniker: "pizza rat",score:0}]
+var players = [{moniker: "a cat", score: 0}, {moniker: "dancing baby", score: 0}, {moniker: "another cat", score: 0}, {moniker: "Charlie", score: 0}, {moniker: "pizza rat", score: 0}]
+
 var selector = 0
 
 
@@ -120,35 +121,38 @@ $(document).on("click", ".boardcard", function(){
 //INCOMING EVENT: Update scoreboard.  Tell winner they won; others they lost.
 socket.on("sendWinner", function(res){
     //edit the score
-    var winner
+    players[res].score++
+    var winner = players[res].moniker
+    console.log(typeof res)
+    // switch (res) {
+    //   case 0: score[0]++
+    //   winner = "the cat"
+    //   break;
+    //   case 1: score[1]++
+    //   winner = "dancing baby"
+    //   break;
+    //   case 2: score[2]++
+    //   winner = "yet another cat"
+    //   break;
+    //   case 3: score[3]++
+    //   winner = "Charlie"
+    //   break;
+    //   case 4: score[4]++
+    //   winner = "Pizza rat"
+    //   break;
+    // }
 
-    score[winner]++
-    switch (res) {
-      case 0: score[0]++
-      winner = "the cat"
-      break;
-      case 1: score[1]++
-      winner = "dancing baby"
-      break;
-      case 2: score[2]++
-      winner = "yet another cat"
-      break;
-      case 3: score[3]++
-      winner = "Charlie"
-      break;
-      case 4: score[4]++
-      winner = "Pizza rat"
-      break;
+    players.forEach(e,i){
+      $(".score" + i).html(e.moniker + ": " + e.score)
     }
 
-    $(".score1").html("A Cat: " + score[0])
-    $(".score2").html("Dancing baby: " + score[1])
-    $(".score3").html("Yet Another Cat: " + score[2])
-    $(".score4").html("Charlie: " + score[3])
-    $(".score5").html("Pizza rat: " + score[4])
+    // $(".score1").html(players[0].moniker + ": " + players[0].score)
+    // $(".score2").html(players[1].moniker + ": " + players[1].score)
+    // $(".score3").html(players[2].moniker + ": " + players[2].score)
 
     //winning card jumps!
     var winCard = $(".boardcard[data-player="+res+"]")
+
     function flash () {
       winCard.animate({"bottom":"10vh"}, 200).animate({"bottom":"0"},200,flash)
     }
@@ -156,12 +160,13 @@ socket.on("sendWinner", function(res){
 
     //show win/lose message
     if (playerId === selector){
-      $(".winOrLose").html("Terrible choice, " + winner + " wins.")
+      $(".winOrLose").html(winner + "wins, terrible choice.")
     }else if (playerId === res){
       $(".winOrLose").html("You win.  You must be a terrible person...")
     }else{
       $(".winOrLose").html(winner + " wins, you lose.")
     }
+
 
     $(".winOrLose").css({"display":"block"})
 
