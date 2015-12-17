@@ -25,14 +25,14 @@ var selector = 1
 //INCOMING EVENT: Receive player number, name, question and room.
 var playerId
 var roomId
-socket.on('userId', function(ids){
-  playerId = ids.newId;
+socket.on('setup', function(res){
+  playerId = res.playerId;
   var playerName = players[playerId - 1]
   $(".playerName").html("You are "+playerName+".")
 
-  $(".question").html(ids.question)
+  $(".question").html(res.question)
 
-  roomId = ids.roomId;
+  roomId = res.roomId;
   console.log(playerId);
   console.log(roomId);
 
@@ -42,7 +42,6 @@ socket.on('userId', function(ids){
   }else{
     $(".turnDisplay").html(notTurnMessage)
   }
-
 })
 
 //function for dealing the cards

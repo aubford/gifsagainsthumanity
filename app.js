@@ -21,7 +21,7 @@ var startingQuestionNumber
 io.on('connection', function(socket){
 //////////////SETUP//////////////////////////
     //determines which player# this is.
-    var newId = userCounter
+    var playerId = userCounter
 
     //if socket is a Player1, then it's socket.id is the new roomId.
     if (userCounter === 1){
@@ -34,7 +34,7 @@ io.on('connection', function(socket){
 
 
     //OUTPUT-THIS EVENT: tack userId and roomId to the new socket's main.js.
-    socket.emit('userId', {"newId" : newId, "roomId" : roomId, "question":questionBank.questions[startingQuestionNumber]})
+    socket.emit('setup', {"playerId" : playerId, "roomId" : roomId, "question":questionBank.questions[startingQuestionNumber]})
 
 
 
