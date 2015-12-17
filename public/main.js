@@ -11,8 +11,8 @@ function getgifs(){
     })
   }
 //static variables
-var turnMessage = "It's your turn!  Pick the .gif submitted by the other players in the box above that best answers the statement!"
-var notTurnMessage = "Pick a .gif from the options below that you think best answers the statement!"
+var turnMessage = "It's your turn!  Pick your favorite answer above!"
+var notTurnMessage = "Pick a .gif below as your answer!"
 
 //starting score and players
 var score = [0,0,0,0]
@@ -58,7 +58,7 @@ for (var i = 0; i < 4; i++) {
 }
 }
 //call it
-// deal()      !!!!!!!!
+deal()
 
 ///////////////////////////RESET//////////////////////////
 
@@ -143,7 +143,7 @@ socket.on('sendWinner', function(res){
     $(".score1").html("A Cat: " + score[0])
     $(".score2").html("Beebs: " + score[1])
     $(".score3").html("Yet Another Cat: " + score[2])
-    $(".score4").html("A Person Falling Down: " + score[3])
+    $(".score4").html("A Person Tripping: " + score[3])
 
 
     //show win/lose message

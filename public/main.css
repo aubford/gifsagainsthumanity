@@ -26,7 +26,7 @@ header {
   background-color: black;
   color: white;
   padding-top: 2vh;
-  padding-left: 2.5vw;
+  padding-left: 2vw;
 }
 
 body::after {
@@ -59,7 +59,7 @@ body::after {
   letter-spacing: .15vw;
   font-weight: bold;
   padding-top: 6vh;
-  padding-right: 2vw;
+  padding-right: 3vw;
   float: right;
 }
 
@@ -94,24 +94,24 @@ body::after {
   display: none;
   position: absolute;
   z-index: 1;
-  background: red;
+  color: red;
   font-size: 5vmin;
   font-weight: bold;
 }
 
 .question {
   width: 100%;
-  height: 16.5vh;
-  padding-top: 3vh;
+  min-height: 17.5vh;
+  padding-top: 1vh;
   padding-left: 4vw;
-  font-size: 5vmin;
+  font-size: 4.5vmin;
+  text-align: center;
 }
 
 .turnDisplay {
-  height: 5vh;
+  height: 4vh;
   width: 100%;
-  font-size: 2vmin;
-  font-weight: bold;
+  font-size: 3vmin;
   text-align: center;
 }
 
