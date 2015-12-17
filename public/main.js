@@ -15,8 +15,7 @@ var turnMessage = "It's your turn!  Pick your favorite answer above!"
 var notTurnMessage = "Pick a .gif below as your answer!"
 
 //starting score and players
-var score = [0,0,0,0,0]
-var players = ["a cat","dancing baby","another cat","Charlie", "pizza rat"]
+var players = [{moniker: "a cat", score:0},{moniker: "dancing baby", 0},{moniker: "another cat", score: 0},{moniker: "Charlie", score:0}, {moniker: "pizza rat",score:0}]
 var selector = 0
 
 
@@ -27,7 +26,7 @@ var playerId
 var roomId
 socket.on('setup', function(res){
   playerId = res.playerId;
-  var playerName = players[playerId]
+  var playerName = players[playerId].moniker
   $(".playerName").html("You are "+playerName+".")
 
   $(".question").html(res.question)
@@ -92,37 +91,38 @@ socket.on('newgame', function(res){
 
 //OUTPUT EVENT: Player can select a card to add to board.
 var canhand = true
-$(document).on('click', ".handcard", function(){
+$(document).on("click", ".handcard", function(){
     if (canhand === true && selector !== playerId){
-    socket.emit('sendcard', {"card":$(this)[0].outerHTML,"roomId":roomId})
+    socket.emit("sendcard", {"card":$(this)[0].outerHTML,"roomId":roomId})
     }
     canhand = false
 })
 
 //INCOMING EVENT: Add card to THIS board.
-socket.on('sendcard', function(card){
-  $('.board').append(card)
-  $('.board').children().removeClass("handcard").addClass("boardcard")
+socket.on("sendcard", function(card){
+  $(".board").append(card)
+  $(".board").children().removeClass("handcard").addClass("boardcard")
 })
 
 ////////////////////////SELECTION///////////////////////
 
 //OUTPUT EVENT: If THIS is selector; click = winning card
 var canboard = true
-$(document).on('click', '.boardcard', function(){
+$(document).on("click", ".boardcard", function(){
     if (selector === playerId && canboard === true){
       //send: winning card's playerId, the roomId, and current score.
-      socket.emit('selection', {"playerWinner":$(this).data("player"), 'roomId':roomId})
+      socket.emit("selection", {"playerWinner":$(this).data("player"), "roomId":roomId})
     }
       canboard = false
 })
 
 
 //INCOMING EVENT: Update scoreboard.  Tell winner they won; others they lost.
-socket.on('sendWinner', function(res){
+socket.on("sendWinner", function(res){
     //edit the score
     var winner
 
+    score[winner]++
     switch (res) {
       case 0: score[0]++
       winner = "the cat"
@@ -153,7 +153,7 @@ socket.on('sendWinner', function(res){
       winCard.animate({"bottom":"10vh"}, 200).animate({"bottom":"0"},200,flash)
     }
     flash()
-    
+
     //show win/lose message
     if (playerId === selector){
       $(".winOrLose").html("Terrible choice, " + winner + " wins.")
