@@ -32,11 +32,10 @@ io.on('connection', function(socket){
       socket.join(roomId)
     }
 
-
     //OUTPUT-THIS EVENT: tack userId and roomId to the new socket's main.js.
     socket.emit('setup', {"playerId" : playerId, "roomId" : roomId, "question":questionBank.questions[startingQuestionNumber]})
 
-
+    io.to(roomId).emit('newPlayer', {"playerId":playerId})
 
     //counter for userCounter increments between 1 and 4.
     if (userCounter !== 4) {
@@ -81,7 +80,7 @@ io.on('connection', function(socket){
 
 
 
-http.listen(5000, function(){
+http.listen(3000, function(){
   console.log('listening on *:3000');
 });
 
