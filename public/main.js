@@ -15,9 +15,9 @@ var turnMessage = "It's your turn!  Pick your favorite answer above!"
 var notTurnMessage = "Pick a .gif below as your answer!"
 
 //starting score and players
-var score = [0,0,0,0]
-var players = ["a cat","Beebs","yet another cat","a person falling down"]
-var selector = 1
+var score = [0,0,0,0,0]
+var players = ["a cat","dancing baby","another cat","Charlie", "pizza rat"]
+var selector = 0
 
 
 ///////////////////////////SETUP/////////////////////////////
@@ -27,7 +27,7 @@ var playerId
 var roomId
 socket.on('setup', function(res){
   playerId = res.playerId;
-  var playerName = players[playerId - 1]
+  var playerName = players[playerId]
   $(".playerName").html("You are "+playerName+".")
 
   $(".question").html(res.question)
@@ -46,9 +46,9 @@ socket.on('setup', function(res){
 
 //function for dealing the cards
 function deal(){
-for (var i = 0; i < 4; i++) {
   $(".hand").children().remove()
   $(".board").children().not("p").remove()
+for (var i = 0; i < 4; i++) {
 
   var callrandom = getgifs()
   callrandom.done(function(res){
@@ -65,7 +65,7 @@ deal()
 socket.on('newgame', function(res){
   //change who the selector is
   if (selector === 4){
-    selector = 1
+    selector = 0
   }else{
     selector++
   }
@@ -105,7 +105,6 @@ socket.on('sendcard', function(card){
   $('.board').children().removeClass("handcard").addClass("boardcard")
 })
 
-
 ////////////////////////SELECTION///////////////////////
 
 //OUTPUT EVENT: If THIS is selector; click = winning card
@@ -121,38 +120,47 @@ $(document).on('click', '.boardcard', function(){
 
 //INCOMING EVENT: Update scoreboard.  Tell winner they won; others they lost.
 socket.on('sendWinner', function(res){
-    console.log(res)
     //edit the score
     var winner
+
     switch (res) {
-      case 1: score[0]++
-      winner = "Player 1"
+      case 0: score[0]++
+      winner = "the cat"
       break;
-      case 2: score[1]++
-      winner = "Player 2"
+      case 1: score[1]++
+      winner = "dancing baby"
       break;
-      case 3: score[2]++
-      winner = "Player 3"
+      case 2: score[2]++
+      winner = "yet another cat"
       break;
-      case 4: score[3]++
-      winner = "Player 4"
+      case 3: score[3]++
+      winner = "Charlie"
+      break;
+      case 4: score[4]++
+      winner = "Pizza rat"
       break;
     }
 
     $(".score1").html("A Cat: " + score[0])
-    $(".score2").html("Beebs: " + score[1])
+    $(".score2").html("Dancing baby: " + score[1])
     $(".score3").html("Yet Another Cat: " + score[2])
-    $(".score4").html("A Person Tripping: " + score[3])
+    $(".score4").html("Charlie: " + score[3])
+    $(".score5").html("Pizza rat: " + score[4])
 
-
+    //winning card jumps!
+    var winCard = $(".boardcard[data-player="+res+"]")
+    function flash () {
+      winCard.animate({"bottom":"10vh"}, 200).animate({"bottom":"0"},200,flash)
+    }
+    flash()
+    
     //show win/lose message
     if (playerId === selector){
       $(".winOrLose").html("Terrible choice, " + winner + " wins.")
     }else if (playerId === res){
       $(".winOrLose").html("You win.  You must be a terrible person...")
-
     }else{
-      $(".winOrLose").html(winner + " wins, you lose. Ha.")
+      $(".winOrLose").html(winner + " wins, you lose.")
     }
 
     $(".winOrLose").css({"display":"block"})

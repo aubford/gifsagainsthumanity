@@ -68,11 +68,17 @@ body::after {
   min-height: 6.5vh;
   padding: 0 2vw 1vh 2vw;
   background-color: rgba(255,0,0,.75);
+  text-align: center;
+}
+
+.scoreCenter {
+  margin: 0 auto;
+  background-color: blue;
 }
 
 .score {
   display: inline-block;
-  font-size: 2.4vmin;
+  font-size: 2vmin;
   font-weight: bold;
   margin-top: 1vh;
   padding: .5vh 1vw;
@@ -86,7 +92,7 @@ body::after {
   width: 100%;
   position: relative;
   border-top: .5vw solid black;
-  border-bottom: .5vw solid black;
+  border-bottom: 1px solid black;
   background: radial-gradient(circle, rgba(250,190,50,.4)70%, rgba(180,150,30,.1));
 }
 
@@ -95,15 +101,15 @@ body::after {
   position: absolute;
   z-index: 1;
   color: red;
-  font-size: 5vmin;
+  font-size: 8vmin;
   font-weight: bold;
+  text-align: center;
 }
 
 .question {
   width: 100%;
   min-height: 17.5vh;
   padding-top: 1vh;
-  padding-left: 4vw;
   font-size: 4.5vmin;
   text-align: center;
 }
@@ -119,8 +125,8 @@ body::after {
 .hand {
   height: 25vh;
   width: 100%;
-  border-top: .5vw solid black;
-  border-bottom: .5vw solid black;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
   background: radial-gradient(circle, rgba(250,190,50,.4)70%, rgba(180,150,30,.1));
 }
 
@@ -128,6 +134,7 @@ img {
   height: 100%;
   width: 25%;
   float:left;
+  position: relative;
 }
 
 .playerName {

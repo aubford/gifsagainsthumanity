@@ -14,7 +14,7 @@ app.get('/', function(req, res){
 ///SOCKETS///
 //code for each socket connection.
 var questionBank = require("./public/questionBank.js")
-var userCounter = 1
+var userCounter = 0
 var roomId
 var startingQuestionNumber
 
@@ -24,7 +24,7 @@ io.on('connection', function(socket){
     var playerId = userCounter
 
     //if socket is a Player1, then it's socket.id is the new roomId.
-    if (userCounter === 1){
+    if (userCounter === 0){
       roomId = socket.id
       startingQuestionNumber = Math.floor(Math.random() * questionBank.questions.length)
     //other players add this roomId.
@@ -42,7 +42,7 @@ io.on('connection', function(socket){
     if (userCounter !== 4) {
       userCounter++
     }else{
-      userCounter = 1;
+      userCounter = 0;
     }
 
 /////////////ACTIONS//////////////////////////
