@@ -13,13 +13,10 @@ function getgifs(){
 //static variables
 var turnMessage = "It's your turn!  Pick your favorite answer above!"
 var notTurnMessage = "Pick a .gif below as your answer!"
-var selector
-var firstTurn
 
 //starting score and players
-var potentialPlayers = [{moniker: "a cat", score: 0}, {moniker: "dancing baby", score: 0}, {moniker: "another cat", score: 0}, {moniker: "Charlie", score: 0}, {moniker: "pizza rat", score: 0}]
-var players = []
-
+var players = [{moniker: "a cat", score: 0}, {moniker: "dancing baby", score: 0}, {moniker: "another cat", score: 0}, {moniker: "Charlie", score: 0}, {moniker: "pizza rat", score: 0}]
+var selector
 
 
 ///////////////////////////SETUP/////////////////////////////
@@ -32,7 +29,8 @@ socket.on('setup', function(res){
   var playerName = players[playerId].moniker
   $(".playerName").html("You are "+playerName+".")
 
-  $(".question").html(res.question)
+  selector = 0
+  $(".question").html("Please wait for players to join")
 
   roomId = res.roomId;
   console.log(playerId);
@@ -50,16 +48,20 @@ socket.on('setup', function(res){
 function deal(){
   $(".hand").children().remove()
   $(".board").children().not("p").remove()
-for (var i = 0; i < 4; i++) {
 
-  var callrandom = getgifs()
-  callrandom.done(function(res){
-  $(".hand").append("<img data-player="+playerId+" class='handcard' src='"+res.data.image_url+"'>")
-  })
-}
+  for (var i = 0; i < 4; i++) {
+    var callrandom = getgifs()
+    callrandom.done(function(res){
+    $(".hand").append("<img data-player="+playerId+" class='handcard' src='"+res.data.image_url+"'>")
+    })
+  }
+
 }
 //call it
-deal()
+socket.on('deal', function(res){
+  $(".question").html(res.question)
+  deal()
+})
 
 ///////////////////////////RESET//////////////////////////
 
@@ -115,7 +117,7 @@ var canboard = true
 $(document).on("click", ".boardcard", function(){
     if (selector === playerId && canboard === true){
       //send: winning card's playerId, the roomId, and current score.
-      socket.emit("selection", {"playerWinner":$(this).data("player"), "roomId":roomId},"firstTurn":firstTurn)
+      socket.emit("selection", {"playerWinner":$(this).data("player"), "roomId":roomId})
     }
       canboard = false
 })
@@ -127,31 +129,10 @@ socket.on("sendWinner", function(res){
     players[res].score++
     var winner = players[res].moniker
     console.log(typeof res)
-    // switch (res) {
-    //   case 0: score[0]++
-    //   winner = "the cat"
-    //   break;
-    //   case 1: score[1]++
-    //   winner = "dancing baby"
-    //   break;
-    //   case 2: score[2]++
-    //   winner = "yet another cat"
-    //   break;
-    //   case 3: score[3]++
-    //   winner = "Charlie"
-    //   break;
-    //   case 4: score[4]++
-    //   winner = "Pizza rat"
-    //   break;
-    // }
 
     players.forEach(function(e,i){
       $(".score" + i).html(e.moniker + ": " + e.score)
     })
-
-    // $(".score1").html(players[0].moniker + ": " + players[0].score)
-    // $(".score2").html(players[1].moniker + ": " + players[1].score)
-    // $(".score3").html(players[2].moniker + ": " + players[2].score)
 
     //winning card jumps!
     var winCard = $(".boardcard[data-player="+res+"]")
@@ -163,7 +144,7 @@ socket.on("sendWinner", function(res){
 
     //show win/lose message
     if (playerId === selector){
-      $(".winOrLose").html(winner + "wins, terrible choice.")
+      $(".winOrLose").html(winner + " wins, terrible choice.")
     }else if (playerId === res){
       $(".winOrLose").html("You win.  You must be a terrible person...")
     }else{

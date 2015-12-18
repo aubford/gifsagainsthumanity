@@ -97,13 +97,16 @@ body::after {
 }
 
 .winOrLose {
-  display: none;
+  /*display: none;*/
   position: absolute;
   z-index: 1;
   color: red;
-  font-size: 8vmin;
+  top: 6.7vh;
+  font-size: 16vmin;
   font-weight: bold;
+  background: black;
   text-align: center;
+  opacity: .7;
 }
 
 .question {

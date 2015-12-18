@@ -33,9 +33,11 @@ io.on('connection', function(socket){
     }
 
     //OUTPUT-THIS EVENT: tack userId and roomId to the new socket's main.js.
-    socket.emit('setup', {"playerId" : playerId, "roomId" : roomId, "question":questionBank.questions[startingQuestionNumber]})
+    socket.emit('setup', {"playerId" : playerId, "roomId" : roomId})
 
-    io.to(roomId).emit('newPlayer', {"playerId":playerId})
+    if (userCounter === 4){
+      io.to(roomId).emit('deal',{"question":questionBank.questions[startingQuestionNumber]})
+    }
 
     //counter for userCounter increments between 1 and 4.
     if (userCounter !== 4) {
