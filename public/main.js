@@ -11,7 +11,7 @@ function getgifs(){
     })
   }
 //static variables
-var turnMessage = "It's your turn!  Pick your favorite answer above!"
+var turnMessage = "It's your flippin turn!  Pick your favorite answer above!"
 var notTurnMessage = "Pick a .gif below as your answer!"
 
 //starting score and players
@@ -38,7 +38,7 @@ socket.on('setup', function(res){
 
   //display directions
   if (selector === playerId) {
-    $(".turnDisplay").html(turnMessage)
+    $(".hand").html(turnMessage)
   }else{
     $(".turnDisplay").html(notTurnMessage)
   }
@@ -60,7 +60,9 @@ function deal(){
 //call it
 socket.on('deal', function(res){
   $(".question").html(res.question)
-  deal()
+  if (selector !== playerId){
+    deal()
+  }
 })
 
 ///////////////////////////RESET//////////////////////////
@@ -88,7 +90,9 @@ socket.on('newgame', function(res){
   canhand = true
   canboard = true
 
-  deal()
+  if (selector !== playerId){
+    deal()
+  }
 
   console.log(selector)
 })

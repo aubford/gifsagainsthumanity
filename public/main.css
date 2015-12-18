@@ -39,8 +39,8 @@ body::after {
   height: 100%;
   z-index: -1;
   opacity: .3;
-  background-image: url("images/dogCupcakes.jpg");
-  background-size: 100% 100%;
+  background-image: url("images/surprisecat.jpg");
+  background-size: 100% 90%;
 }
 
 .title {
@@ -83,6 +83,7 @@ body::after {
   margin-top: 1vh;
   padding: .5vh 1vw;
   border: .5vh solid black;
+  box-shadow:  .2vw .3vh .2vh .1vh rgba(0,0,0,.5);
 }
 
 
@@ -101,12 +102,12 @@ body::after {
   position: absolute;
   z-index: 1;
   color: red;
-  top: 6.7vh;
-  font-size: 16vmin;
+  /*top: 6.7vh;*/
+  font-size: 16.1vmin;
   font-weight: bold;
   background: black;
   text-align: center;
-  opacity: .7;
+  opacity: .75;
 }
 
 .question {
@@ -120,7 +121,8 @@ body::after {
 .turnDisplay {
   height: 4vh;
   width: 100%;
-  font-size: 3vmin;
+  padding-top: 1vh;
+  font-size: 2vmin;
   text-align: center;
 }
 
@@ -131,6 +133,8 @@ body::after {
   border-top: 1px solid black;
   border-bottom: 1px solid black;
   background: radial-gradient(circle, rgba(200,140,50,.2)70%, rgba(180,150,30,.1));
+  font-size: 8vmin;
+  text-align: center;
 }
 
 img {
