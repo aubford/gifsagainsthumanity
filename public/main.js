@@ -16,6 +16,7 @@ var notTurnMessage = "Pick a .gif below as your answer!"
 
 //starting score and players
 var players = [{moniker: "a cat", score: 0}, {moniker: "dancing baby", score: 0}, {moniker: "another cat", score: 0}, {moniker: "Charlie", score: 0}, {moniker: "pizza rat", score: 0}]
+
 var selector
 
 
@@ -59,10 +60,13 @@ function deal(){
 }
 //call it
 socket.on('deal', function(res){
+
   $(".question").html(res.question)
+
   if (selector !== playerId){
     deal()
   }
+
 })
 
 ///////////////////////////RESET//////////////////////////
@@ -70,12 +74,14 @@ socket.on('deal', function(res){
 //INCOMING EVENT: Reset the game.
 socket.on('newgame', function(res){
   //change who the selector is
-  firstTurn = false
+  $(".hand").html("")
+
   if (selector === 4){
     selector = 0
   }else{
     selector++
   }
+
 
   //display directions
   if (selector === playerId) {
@@ -90,14 +96,12 @@ socket.on('newgame', function(res){
   canhand = true
   canboard = true
 
-  if (selector !== playerId){
     deal()
-  }
 
   console.log(selector)
 })
 
-///////////////////////PLAY BEGINS///////////////////////
+//////////////PLAY BEGINS///////////////////////
 
 //OUTPUT EVENT: Player can select a card to add to board.
 var canhand = true

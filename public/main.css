@@ -98,7 +98,7 @@ body::after {
 }
 
 .winOrLose {
-  /*display: none;*/
+  display: none;
   position: absolute;
   z-index: 1;
   color: red;
