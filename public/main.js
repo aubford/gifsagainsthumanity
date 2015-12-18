@@ -81,11 +81,15 @@ socket.on('newgame', function(res){
   }else{
     selector++
   }
+  
+  $(".hand").children().remove()
+  $(".board").children().not("p").remove()
 
 
   //display directions
   if (selector === playerId) {
-    $(".turnDisplay").html(turnMessage)
+    $(".hand").html(turnMessage)
+    $(".turnDisplay").html("")
   }else{
     $(".turnDisplay").html(notTurnMessage)
   }
@@ -96,9 +100,10 @@ socket.on('newgame', function(res){
   canhand = true
   canboard = true
 
+  if (selector !== playerId){
     deal()
+  }
 
-  console.log(selector)
 })
 
 //////////////PLAY BEGINS///////////////////////
