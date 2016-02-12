@@ -67,7 +67,7 @@ questions: [
 
 "I do not know with what weapons World War III will be fought with, but World War IV will be fought with ________.",
 
-"What's George W. Bush thinging about right now?",
+"What's George W. Bush thinking about right now?",
 
 "What am I giving up for Lent?",
 
