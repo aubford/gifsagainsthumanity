@@ -1,7 +1,5 @@
-
 $(function(){
 var socket = io()
-
 //Function for API calls to Giphy
 function getgifs(){
       return $.ajax({
@@ -13,15 +11,11 @@ function getgifs(){
 //static variables
 var turnMessage = "It's your turn!  Pick your favorite answer above!"
 var notTurnMessage = "Pick a .gif below as your answer!"
-
 //starting score and players
 var score = [0,0,0,0,0]
 var players = ["a cat","dancing baby","another cat","Charlie", "pizza rat"]
 var selector = 0
-
-
 ///////////////////////////SETUP/////////////////////////////
-
 //INCOMING EVENT: Receive player number, name, question and room.
 var playerId
 var roomId
@@ -29,13 +23,10 @@ socket.on('setup', function(res){
   playerId = res.playerId;
   var playerName = players[playerId]
   $(".playerName").html("You are "+playerName+".")
-
   $(".question").html(res.question)
-
   roomId = res.roomId;
   console.log(playerId);
   console.log(roomId);
-
   //display directions
   if (selector === playerId) {
     $(".turnDisplay").html(turnMessage)
@@ -43,7 +34,6 @@ socket.on('setup', function(res){
     $(".turnDisplay").html(notTurnMessage)
   }
 })
-
 //function for dealing the cards
 function deal(){
   $(".hand").children().remove()
@@ -58,9 +48,7 @@ for (var i = 0; i < 4; i++) {
 }
 //call it
 deal()
-
 ///////////////////////////RESET//////////////////////////
-
 //INCOMING EVENT: Reset the game.
 socket.on('newgame', function(res){
   //change who the selector is
@@ -69,27 +57,21 @@ socket.on('newgame', function(res){
   }else{
     selector++
   }
-
   //display directions
   if (selector === playerId) {
     $(".turnDisplay").html(turnMessage)
   }else{
     $(".turnDisplay").html(notTurnMessage)
   }
-
   //Reset everything.  Re-deal.
   $(".question").html(res.newQuestion)
   $(".winOrLose").css({"display":"none"})
   canhand = true
   canboard = true
-
   deal()
-
   console.log(selector)
 })
-
 ///////////////////////PLAY BEGINS///////////////////////
-
 //OUTPUT EVENT: Player can select a card to add to board.
 var canhand = true
 $(document).on('click', ".handcard", function(){
@@ -98,15 +80,12 @@ $(document).on('click', ".handcard", function(){
     }
     canhand = false
 })
-
 //INCOMING EVENT: Add card to THIS board.
 socket.on('sendcard', function(card){
   $('.board').append(card)
   $('.board').children().removeClass("handcard").addClass("boardcard")
 })
-
 ////////////////////////SELECTION///////////////////////
-
 //OUTPUT EVENT: If THIS is selector; click = winning card
 var canboard = true
 $(document).on('click', '.boardcard', function(){
@@ -116,8 +95,6 @@ $(document).on('click', '.boardcard', function(){
     }
       canboard = false
 })
-
-
 //INCOMING EVENT: Update scoreboard.  Tell winner they won; others they lost.
 socket.on('sendWinner', function(res){
     //edit the score
@@ -140,20 +117,17 @@ socket.on('sendWinner', function(res){
       winner = "Pizza rat"
       break;
     }
-
     $(".score1").html("A Cat: " + score[0])
     $(".score2").html("Dancing baby: " + score[1])
     $(".score3").html("Yet Another Cat: " + score[2])
     $(".score4").html("Charlie: " + score[3])
     $(".score5").html("Pizza rat: " + score[4])
-
     //winning card jumps!
     var winCard = $(".boardcard[data-player="+res+"]")
     function flash () {
       winCard.animate({"bottom":"10vh"}, 200).animate({"bottom":"0"},200,flash)
     }
     flash()
-    
     //show win/lose message
     if (playerId === selector){
       $(".winOrLose").html("Terrible choice, " + winner + " wins.")
@@ -162,23 +136,6 @@ socket.on('sendWinner', function(res){
     }else{
       $(".winOrLose").html(winner + " wins, you lose.")
     }
-
     $(".winOrLose").css({"display":"block"})
-
 })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 })
