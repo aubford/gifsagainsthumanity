@@ -1,1 +1,55 @@
-*.iml*
+node_modules
+
+* Don't commit builds
+dist
+build
+rtfm
+.sass-cache
+
+* Or built docs
+docs
+
+* Or coverage data
+coverage
+.nyc_output
+target
+
+* Or debug output
+npm-debug.log*
+
+* Or backstop data
+backstop_data
+
+* Or env files
+.env
+.env.prod
+src/env.json
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
+
+# Deployment builds
+.beanstalk-container/target
+
+# Things built by tests
+test-utils/json
+test-utils/proto*
+test-utils/api-models
+
+# OS additions
+.DS_Store
+
+# Developer utilities
+TODO
+
+#package-lock
+package-lock.json
+
+#importjs settings
+.importjs.js
+.vscode
+
+# webstorm files
+.idea/*
